@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kairma/components/custom_text_field.dart';
 import 'package:kairma/components/wide_button.dart';
 import 'package:kairma/global/app_theme.dart';
+import 'package:kairma/main.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -85,7 +86,10 @@ class _SignInPageState extends State<SignInPage> {
               ),
               WideButton(
                 text: 'Sign In',
-                onPressed: () {},
+                onPressed: () {
+                  signedIn = true;
+                  Navigator.pop(context);
+                },
               ),
               RichText(
                 text: TextSpan(

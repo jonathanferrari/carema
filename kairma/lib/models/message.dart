@@ -7,7 +7,9 @@ class Message {
   String text;
   double scaleFactor;
   late TextStyle textStyle;
-  late int alignment;
+  int alignment;
+  bool? upvote;
+  bool favorite;
 
   Message({
     this.imageURL,
@@ -16,6 +18,8 @@ class Message {
     String font = 'Lato',
     this.alignment = 4,
     Color color = const Color(0xFF000000),
+    this.upvote,
+    this.favorite = false,
   }) {
     textStyle = TextStyle(fontFamily: font, color: color);
   }

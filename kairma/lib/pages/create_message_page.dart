@@ -134,7 +134,7 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
                       const Text('Text Color'),
                       OutlinedButton(
                         style: ButtonStyle(
-                            side: MaterialStatePropertyAll<BorderSide>(
+                            side: const MaterialStatePropertyAll<BorderSide>(
                               BorderSide(color: AppTheme.secondary, width: 2),
                             ),
                             backgroundColor:
@@ -193,7 +193,7 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
                                     ? OutlinedButton.styleFrom(
                                         backgroundColor:
                                             lighten(AppTheme.primary),
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                             color: AppTheme.primary, width: 2),
                                       )
                                     : null,
