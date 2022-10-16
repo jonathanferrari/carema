@@ -90,7 +90,7 @@ class UserStats:
         result = cursor.fetchone()
         return result
     def avg_carma(id):
-        sql_str = f"SELECT average = SUM(up) - SUM(down) FROM inspo WHERE user_id == {id}"
+        sql_str = f"SELECT average = AVERAGE(SUM(up) - SUM(down)) FROM inspo WHERE user_id == {id}"
         cursor.execute(sql_str)
         result = cursor.fetchone()
         return result
@@ -199,7 +199,7 @@ def create_inspo():
     except Exception as e:
         return jsonify({"error": str(e)})
     
-## PUT methods
+# PUT methods
 
 # @app.route("/<id>", methods=['PUT'])
 # def update_title(id):
@@ -219,7 +219,4 @@ def create_inspo():
 #     except Exception as e:
 #         return jsonify({"error": str(e)})
 
-
-# Runs the API and exposes it on https://<repl name>.<replit username>.repl.co
-# ex. Mine deploys to https://htn-api.jayantsh.repl.co.
 app.run(host='127.0.0.1', port=8088, debug=True)
