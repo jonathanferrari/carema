@@ -53,9 +53,9 @@ class Retrieve:
         return results
 
 class Make:
-    def user(email, name , pwd, deleted, up, down, posts, joined):
-        columns = "(email, name , pwd, deleted, up, down, posts, joined)"
-        values = f"VALUES{(email, name , pwd, deleted, up, down, posts, joined)}"
+    def user(email, name , pwd, deleted, up, down, posts):
+        columns = "(email, name , pwd, deleted, up, down, posts)"
+        values = f"VALUES{(email, name , pwd, deleted, up, down, posts)}"
         cursor.execute(f"INSERT INTO users {columns} {values} RETURNING *")
         result = cursor.fetchone()
         return result
@@ -75,21 +75,35 @@ class Make:
 class UserStats:
 
     def most_popular(id):
-        pass
+        sql_str = f"SELECT * FROM inspo WHERE user_id == {id} ORDER BY up DESC LIMIT 1"
+        cursor.execute(sql_str)
+        result = cursor.fetchone()
+        return result
     def total_karma(id):
-        pass
+        sql_str = f"SELECT SUM(up) FROM inspo WHERE user_id == {id}"
+        cursor.execute(sql_str)
+        result = cursor.fetchone()
+        return result
     def total_posts(id):
-        pass
-    def days_since_join(id):
-        pass
+        sql_str = f"SELECT COUNT(*) FROM inspo WHERE user_id == {id}"
+        cursor.execute(sql_str)
+        result = cursor.fetchone()
+        return result
     def avg_carma(id):
-        pass
-    def carma_per_day(id):
-        pass
+        sql_str = f"SELECT average = AVERAGE(SUM(up) - SUM(down)) FROM inspo WHERE user_id == {id}"
+        cursor.execute(sql_str)
+        result = cursor.fetchone()
+        return result
     def positivity_ratio(id):
-        pass
+        sql_str = f"SELECT ratio = SUM(up) / SUM(down) FROM inspo WHERE user_id == {id}"
+        cursor.execute(sql_str)
+        result = cursor.fetchone()
+        return result
     def favorite_inspo(n, id):
-        pass
+        sql_str = f"SELECT * FROM favorite INNER JOIN inspo ON favorite.inspo_id=inspo.id WHERE user_id = {id}"
+        cursor.execute(sql_str)
+        result = cursor.fetchone()
+        return result
     
         
 class UniversalStats:
@@ -149,8 +163,7 @@ def create_user():
          int(new_user["deleted"]),
          int(new_user["up"]),
          int(new_user["down"]),
-         int(new_user["posts"]),
-         new_user["joined"]
+         int(new_user["posts"])
          )
         return jsonify(result)
     except Exception as e:
@@ -186,7 +199,7 @@ def create_inspo():
     except Exception as e:
         return jsonify({"error": str(e)})
     
-## PUT methods
+# PUT methods
 
 # @app.route("/<id>", methods=['PUT'])
 # def update_title(id):
@@ -206,7 +219,4 @@ def create_inspo():
 #     except Exception as e:
 #         return jsonify({"error": str(e)})
 
-
-# Runs the API and exposes it on https://<repl name>.<replit username>.repl.co
-# ex. Mine deploys to https://htn-api.jayantsh.repl.co.
-app.run(host="0.0.0.0", port = "8080", debug=True)
+app.run('0.0.0.0', port='4000',debug=True)

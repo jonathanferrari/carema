@@ -22,7 +22,7 @@ cursor.execute(
 )
 
 cursor.execute(
-    "CREATE TABLE users (id SERIAL PRIMARY KEY, email STRING, name STRING, pwd STRING, deleted INT, up INT, down INT, posts INT, joined DATE)"
+    "CREATE TABLE users (id SERIAL PRIMARY KEY, email STRING, name STRING, pwd STRING, deleted INT, up INT, down INT, posts INT)"
 )
 
 cursor.execute(

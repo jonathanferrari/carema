@@ -1,9 +1,8 @@
-Flask>=1.1.1,<3.0.0
+Flask>=2.0.1
 pony>=0.7.14,<0.8.0
 psycopg2-binary>=2.9.1,<3.0.0
-requests>=2.19.0,<3.0.0
+requests>=2.20.0,<3.0.0
 python-dotenv==0.20.0
 poetry-core>=1.0.0
 poetry>=1.0.0
 poetry-semver==0.1.0
-gunicorn>=20.0.4
