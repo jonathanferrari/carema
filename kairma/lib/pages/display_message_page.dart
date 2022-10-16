@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kairma/components/wide_button.dart';
 
 import '../components/message_display.dart';
 import '../models/message.dart';
@@ -72,21 +73,15 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
             onPressed: () =>
                 setState(() => message = Message.generateMessage()),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextButton(
-                  child: const Text(
-                    'Create Message',
-                    textScaleFactor: 1.6,
-                  ),
-                  onPressed: () async {
-                    Navigator.pushNamed(context, '/create').then((m) {
-                      if (m is Message) setState(() => message = m);
-                    });
-                  }),
-            ),
+          WideButton(
+            text: 'Create Message',
+            onPressed: () async {
+              Navigator.pushNamed(context, '/create').then(
+                (m) {
+                  if (m is Message) setState(() => message = m);
+                },
+              );
+            },
           ),
         ],
       ),

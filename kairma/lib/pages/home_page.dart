@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_scatter/flutter_scatter.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kairma/components/wide_button.dart';
 import 'package:kairma/global/app_theme.dart';
 
 class HomePage extends StatelessWidget {
@@ -46,19 +47,10 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextButton(
-                child: const Text(
-                  'Get Inpired',
-                  textScaleFactor: 1.6,
-                ),
-                onPressed: () => Navigator.pushNamed(context, "/display"),
-              ),
-            ),
-          )
+          WideButton(
+            text: 'Get Inpired',
+            onPressed: () => Navigator.pushNamed(context, "/display"),
+          ),
         ],
       ),
     );

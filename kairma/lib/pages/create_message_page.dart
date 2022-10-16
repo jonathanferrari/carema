@@ -7,6 +7,7 @@ import 'package:kairma/global/app_theme.dart';
 import 'package:kairma/pages/display_message_page.dart';
 import 'package:o_color_picker/o_color_picker.dart';
 
+import '../components/wide_button.dart';
 import '../models/message.dart';
 import '../components/message_display.dart';
 
@@ -83,22 +84,14 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ListView(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1.0, color: AppTheme.secondary),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(12.0),
-                      ),
-                      color: lighten(AppTheme.primary),
+                  TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Your Text Here',
                     ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      scrollPadding: const EdgeInsets.all(8),
-                      decoration: const InputDecoration.collapsed(
-                        hintText: 'Your Text Here',
-                      ),
-                      onChanged: (s) => setState(() => message.text = s),
-                    ),
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    onChanged: (s) => setState(() => message.text = s),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 32.0),
@@ -222,23 +215,14 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
                     height: 8,
                   ),
                   const Divider(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TextButton(
-                        child: const Text(
-                          'Inspire Others',
-                          textScaleFactor: 1.6,
-                        ),
-                        onPressed: () {
-                          message.scaleFactor *= 1.2;
-                          message.imageURL =
-                              './images/${Message.images[imageIndex]}';
-                          Navigator.pop(context, message);
-                        },
-                      ),
-                    ),
+                  WideButton(
+                    text: 'Inspire Others',
+                    onPressed: () {
+                      message.scaleFactor *= 1.2;
+                      message.imageURL =
+                          './images/${Message.images[imageIndex]}';
+                      Navigator.pop(context, message);
+                    },
                   ),
                 ],
               ),

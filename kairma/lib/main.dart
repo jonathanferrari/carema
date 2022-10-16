@@ -4,6 +4,10 @@ import 'package:kairma/global/app_theme.dart';
 import 'package:kairma/pages/create_message_page.dart';
 import 'package:kairma/pages/display_message_page.dart';
 import 'package:kairma/pages/home_page.dart';
+import 'package:kairma/pages/sign_in_page.dart';
+import 'package:kairma/pages/sign_up_page.dart';
+
+bool signedIn = false;
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Care-ma',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -41,11 +45,13 @@ class MyApp extends StatelessWidget {
               color: AppTheme.secondary),
         ),
       ),
-      initialRoute: '/home',
+      initialRoute: '/signin',
       routes: {
         '/home': (context) => const HomePage(),
         '/display': (context) => const DisplayMessagePage(),
         '/create': (context) => const CreateMessagePage(),
+        '/signin': (context) => const SignInPage(),
+        '/signup': (context) => const SignUpPage(),
       },
     );
   }
