@@ -4,7 +4,8 @@ import '../components/message_display.dart';
 import '../models/message.dart';
 
 class DisplayMessagePage extends StatefulWidget {
-  const DisplayMessagePage({Key? key}) : super(key: key);
+  final Message? message;
+  const DisplayMessagePage({Key? key, this.message}) : super(key: key);
 
   @override
   State<DisplayMessagePage> createState() => _DisplayMessagePageState();
@@ -17,7 +18,7 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
   @override
   void initState() {
     super.initState();
-    message = Message.generateMessage();
+    message = widget.message ?? Message.generateMessage();
     upvote = false;
     downvote = false;
     favorite = false;
@@ -72,7 +73,7 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
                 setState(() => message = Message.generateMessage()),
           ),
           TextButton(
-              Widget: const Text('Create Message'),
+              child: const Text('Create Message'),
               onPressed: () => Navigator.pushNamed(context, '/create')),
         ],
       ),

@@ -14,11 +14,12 @@ class MessageDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset(
-          message.imageURL,
-          fit: BoxFit.fill,
-          scale: 0.1,
-        ),
+        if (message.imageURL != null)
+          Image.asset(
+            message.imageURL ?? '',
+            fit: BoxFit.fill,
+            scale: 0.1,
+          ),
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.width,

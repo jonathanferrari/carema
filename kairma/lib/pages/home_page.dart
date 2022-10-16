@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
         children: [
           const Text('Home Page'),
           TextButton(
-            Widget: const Text('View Message'),
+            child: const Text('View Message'),
             onPressed: () => Navigator.pushNamed(context, "/display"),
           )
         ],

@@ -1,5 +1,10 @@
+import 'dart:math';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_font_picker/flutter_font_picker.dart';
+import 'package:kairma/pages/display_message_page.dart';
+import 'package:o_color_picker/o_color_picker.dart';
 
 import '../models/message.dart';
 import '../components/message_display.dart';
@@ -13,67 +18,151 @@ class CreateMessagePage extends StatefulWidget {
 
 class _CreateMessagePageState extends State<CreateMessagePage> {
   late Message message;
+  late int imageIndex;
 
   @override
   void initState() {
     super.initState();
 
+    imageIndex = Random().nextInt(Message.images.length);
     message = Message();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            leading: IconButton(
-              icon: const Icon(Icons.chevron_left),
-              onPressed: () => Navigator.pop(context),
-            )),
-        body: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32.0),
-              child: MessageDisplay(message),
-            ),
-            Container(
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(width: 1.0),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(12.0),
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: const Icon(Icons.chevron_left),
+            onPressed: () => Navigator.pop(context),
+          )),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            child: Stack(
+              children: [
+                CarouselSlider(
+                  options: CarouselOptions(
+                    aspectRatio: 1.0,
+                    enlargeCenterPage: true,
+                    onPageChanged: (i, r) => imageIndex = i,
+                    initialPage: imageIndex,
+                  ),
+                  items: List.generate(
+                      Message.images.length,
+                      (i) => Image.asset(
+                            './images/${Message.images[i]}',
+                          )),
                 ),
-                color: Colors.grey[300],
-              ),
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                scrollPadding: const EdgeInsets.all(8),
-                decoration: const InputDecoration.collapsed(
-                  hintText: 'Your Text Here',
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.1),
+                  child: MessageDisplay(message),
                 ),
-                onChanged: (s) => setState(() => message.text = s),
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              border: Border.all(width: 1.0),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(12.0),
               ),
+              color: Colors.grey[300],
             ),
-            Slider(
-              value: message.scaleFactor,
-              onChanged: (v) => setState(() => message.scaleFactor = v),
-              min: 0.5,
-              max: 4.5,
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              scrollPadding: const EdgeInsets.all(8),
+              decoration: const InputDecoration.collapsed(
+                hintText: 'Your Text Here',
+              ),
+              onChanged: (s) => setState(() => message.text = s),
             ),
-            TextButton(
-                Widget: const Text('Pick a font'),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 16.0, top: 32.0),
+            child: Text('Text Size'),
+          ),
+          Slider(
+            value: message.scaleFactor,
+            onChanged: (v) => setState(() => message.scaleFactor = v),
+            min: 0.5,
+            max: 4.5,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Text('Font Family'),
+              TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => FontPicker(
+                        initialFontFamily: "Berlin Sans",
                         onFontChanged: (PickerFont font) => setState(
                             () => message.textStyle = font.toTextStyle()),
                       ),
                     ),
                   );
-                }),
-          ],
-        ));
+                },
+                child: Text(message.textStyle.fontFamily.toString()),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Text('Text Color'),
+              TextButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (var states) =>
+                      message.textStyle.color ?? const Color(0xFF000000),
+                )),
+                child: Container(),
+                onPressed: () => showDialog<void>(
+                  context: context,
+                  builder: (_) => Material(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        OColorPicker(
+                          selectedColor: message.textStyle.color,
+                          colors: primaryColorsPalette,
+                          onColorChange: (color) {
+                            setState(() {
+                              message.textStyle = TextStyle(
+                                  fontFamily: message.textStyle.fontFamily,
+                                  color: color);
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          TextButton(
+              child: const Text('Create The Guy'),
+              onPressed: () {
+                message.scaleFactor *= 1.2;
+                message.imageURL = './images/${Message.images[imageIndex]}';
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (c) => DisplayMessagePage(
+                              message: message,
+                            )));
+              }),
+        ],
+      ),
+    );
   }
 }

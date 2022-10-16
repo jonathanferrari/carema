@@ -3,13 +3,14 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 
 class Message {
-  String imageURL, text;
+  String? imageURL;
+  String text;
   double scaleFactor;
   late TextStyle textStyle;
   late Alignment alignment;
 
   Message({
-    this.imageURL = 'images/img01.jfif',
+    this.imageURL,
     this.text = 'Your Text Here',
     this.scaleFactor = 2,
     String font = 'Roboto',
