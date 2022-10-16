@@ -53,15 +53,15 @@ class Retrieve:
         return results
 
 class Make:
-    def user(id, email, name , pwd, deleted, up, down, posts, joined):
-        columns = "(id, email, name , pwd, deleted, up, down, posts, joined)"
-        values = f"VALUES{(id, email, name , pwd, deleted, up, down, posts, joined)}"
+    def user(email, name , pwd, deleted, up, down, posts, joined):
+        columns = "(email, name , pwd, deleted, up, down, posts, joined)"
+        values = f"VALUES{(email, name , pwd, deleted, up, down, posts, joined)}"
         cursor.execute(f"INSERT INTO users {columns} {values} RETURNING *")
         result = cursor.fetchone()
         return result
-    def inspo(id, user_id, photo, up, down, font, size, color, align):
-        columns = "(id, user_id, photo, up, down, font, size, color, align)"
-        values = f"Values{(id, user_id, photo, up, down, font, size, color, align)}"
+    def inspo(user_id, photo, up, down, font, size, color, align):
+        columns = "(user_id, photo, up, down, font, size, color, align)"
+        values = f"Values{(user_id, photo, up, down, font, size, color, align)}"
         cursor.execute(f"INSERT INTO inspos {columns} {values} RETURNING *")
         result = cursor.fetchone()
         return result
@@ -143,7 +143,6 @@ def create_user():
     new_user = request.json
     try:
         result = Make.user(
-         int(new_user["id"]),
          new_user["email"],
          new_user["name"],
          new_user["pwd"],
@@ -174,7 +173,6 @@ def create_inspo():
     new_inspo = request.json
     try:
         result = Make.inspo(
-            int(new_inspo["id"]),
             int(new_inspo["user_id"]),
             new_inspo["photo"],
             int(new_inspo["up"]),
