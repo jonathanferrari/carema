@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../components/message_display.dart';
 import '../models/message.dart';
 
 class DisplayMessagePage extends StatefulWidget {
@@ -36,27 +37,7 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.width,
-            child: Stack(
-              children: [
-                Image.asset(
-                  message.imageURL,
-                  fit: BoxFit.fill,
-                  scale: 0.1,
-                ),
-                SizedBox(
-                  width: double.maxFinite,
-                  height: double.maxFinite,
-                  child: Align(
-                    alignment: message.alignment,
-                    child: Text(
-                      message.text,
-                      style: message.textStyle,
-                      textScaleFactor: message.scaleFactor,
-                    ),
-                  ),
-                )
-              ],
-            ),
+            child: MessageDisplay(message),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -90,7 +71,9 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
             onPressed: () =>
                 setState(() => message = Message.generateMessage()),
           ),
-          TextButton(child: const Text('Create Message'), onPressed: () {}),
+          TextButton(
+              Widget: const Text('Create Message'),
+              onPressed: () => Navigator.pushNamed(context, '/create')),
         ],
       ),
     );

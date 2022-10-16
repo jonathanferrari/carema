@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kairma/pages/create_message_page.dart';
 import 'package:kairma/pages/display_message_page.dart';
 import 'package:kairma/pages/home_page.dart';
 
@@ -26,10 +27,11 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/display',
+      initialRoute: '/create',
       routes: {
         '/home': (context) => const HomePage(),
-        '/display': (context) => const DisplayMessagePage()
+        '/display': (context) => const DisplayMessagePage(),
+        '/create': (context) => const CreateMessagePage(),
       },
     );
   }

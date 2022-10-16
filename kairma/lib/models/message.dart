@@ -3,14 +3,14 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 
 class Message {
-  final String imageURL, text;
-  final double scaleFactor;
-  late final TextStyle textStyle;
-  late final Alignment alignment;
+  String imageURL, text;
+  double scaleFactor;
+  late TextStyle textStyle;
+  late Alignment alignment;
 
   Message({
-    required this.imageURL,
-    required this.text,
+    this.imageURL = 'images/img01.jfif',
+    this.text = 'Your Text Here',
     this.scaleFactor = 2,
     String font = 'Roboto',
     int alignment = 4,
@@ -42,11 +42,10 @@ class Message {
     'img05.png',
   ];
 
-  static Message generateMessage() {
+  static Message generateMessage({String? text}) {
     return Message(
         imageURL: './images/${images[rng.nextInt(images.length)]}',
-        text:
-            'Hello World! I\'m here\n now it\'s great to\n see you all oh yay',
+        text: text ?? 'Your Text Here',
         scaleFactor: (rng.nextDouble() + 0.5) * 2,
         alignment: rng.nextInt(alignments.length),
         color: Color.fromARGB(
