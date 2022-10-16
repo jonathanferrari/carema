@@ -38,6 +38,8 @@ dependencies:
   o_color_picker: ^1.0.2
   firebase_core: ^1.24.0
   flutter_scatter: ^0.2.0
+  google_fonts: ^3.0.1
+  flutter_svg: ^1.1.5
 
 dev_dependencies:
   flutter_test:

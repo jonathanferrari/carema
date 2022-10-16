@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_scatter/flutter_scatter.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:kairma/global/app_theme.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,6 +18,23 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Container(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                './images/logo_bad.png',
+                height: 64,
+              ),
+              const SizedBox(
+                width: 32,
+              ),
+              const Text(
+                'Care-ma',
+                textScaleFactor: 3,
+              ),
+            ],
+          ),
           Center(
             child: Scatter(
               fillGaps: true,
@@ -27,9 +46,18 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          TextButton(
-            child: const Text('View Message'),
-            onPressed: () => Navigator.pushNamed(context, "/display"),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextButton(
+                child: const Text(
+                  'Get Inpired',
+                  textScaleFactor: 1.6,
+                ),
+                onPressed: () => Navigator.pushNamed(context, "/display"),
+              ),
+            ),
           )
         ],
       ),
