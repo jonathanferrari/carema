@@ -46,6 +46,22 @@ class Message {
     'img03.jpg',
     'img04.jpg',
     'img05.png',
+    'bk2.png',
+    'bk3.png',
+    'bk4.png',
+    'bk5.png',
+    'bk6.png',
+    'bk7.png',
+    'bk8.png',
+    'bk9.png',
+    'bk10.png',
+    'bk11.png',
+    'bk12.png',
+    'bk13.png',
+    'bk14.png',
+    'bk15.png',
+    'bk16.png',
+    'bk17.png',
   ];
 
   static Message generateMessage({String? text}) {
