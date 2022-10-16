@@ -5,8 +5,8 @@
 ##  Team Members:
 
  - Project Manager / Database Developer: `Jonathan Ferrari`
- - Developer / Social Coodninator: `Justin Williams`
- - Graphic Designer/ Back-End Developer: `Jessica Golden`
+ - Zepp Developer / Social Coodninator: `Justin Williams`
+ - Graphic Designer/ Lead Analyst: `Jessica Golden`
  - Lead Mobile Developer: `Jason Telanoff`
 
 ## Tools:
