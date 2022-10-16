@@ -1,0 +1,6 @@
+\.replit
+cockroach-v22.1.6.linux-amd64/
+cockroach
+__pycache__/
+replit.nix
+venv/
