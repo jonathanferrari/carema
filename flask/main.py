@@ -219,4 +219,4 @@ def create_inspo():
 #     except Exception as e:
 #         return jsonify({"error": str(e)})
 
-app.run(host='127.0.0.1', port=8088, debug=True)
+app.run('0.0.0.0', debug=True)
