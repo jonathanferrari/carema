@@ -20,15 +20,19 @@ class MessageDisplay extends StatelessWidget {
             fit: BoxFit.fill,
             scale: 0.1,
           ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.width,
-          child: Align(
-            alignment: message.alignment,
-            child: Text(
-              message.text,
-              style: message.textStyle,
-              textScaleFactor: message.scaleFactor,
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width,
+            child: Align(
+              alignment: Message.alignments[message.alignment],
+              child: Text(
+                message.text,
+                style: message.textStyle,
+                textScaleFactor: message.scaleFactor,
+                textAlign: Message.textAlignments[message.alignment % 3],
+              ),
             ),
           ),
         )

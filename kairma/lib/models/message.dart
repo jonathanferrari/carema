@@ -7,18 +7,17 @@ class Message {
   String text;
   double scaleFactor;
   late TextStyle textStyle;
-  late Alignment alignment;
+  late int alignment;
 
   Message({
     this.imageURL,
     this.text = 'Your Text Here',
     this.scaleFactor = 2,
-    String font = 'Roboto',
-    int alignment = 4,
+    String font = 'Lato',
+    this.alignment = 4,
     Color color = const Color(0xFF000000),
   }) {
     textStyle = TextStyle(fontFamily: font, color: color);
-    this.alignment = alignments[alignment];
   }
 
   static const List<Alignment> alignments = [
@@ -31,6 +30,12 @@ class Message {
     Alignment.bottomLeft,
     Alignment.bottomCenter,
     Alignment.bottomRight,
+  ];
+
+  static const List<TextAlign> textAlignments = [
+    TextAlign.start,
+    TextAlign.center,
+    TextAlign.end,
   ];
 
   static Random rng = Random();

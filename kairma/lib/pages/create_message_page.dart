@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_font_picker/flutter_font_picker.dart';
+import 'package:kairma/global/app_theme.dart';
 import 'package:kairma/pages/display_message_page.dart';
 import 'package:o_color_picker/o_color_picker.dart';
 
@@ -38,10 +39,10 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
             icon: const Icon(Icons.chevron_left),
             onPressed: () => Navigator.pop(context),
           )),
-      body: ListView(
+      body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            padding: const EdgeInsets.only(top: 16.0, bottom: 4.0),
             child: Stack(
               children: [
                 CarouselSlider(
@@ -74,148 +75,182 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              border: Border.all(width: 1.0),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(12.0),
-              ),
-              color: Colors.grey[300],
-            ),
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              scrollPadding: const EdgeInsets.all(8),
-              decoration: const InputDecoration.collapsed(
-                hintText: 'Your Text Here',
-              ),
-              onChanged: (s) => setState(() => message.text = s),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 16.0, top: 32.0),
-            child: Text('Text Size'),
-          ),
-          Slider(
-            value: message.scaleFactor,
-            onChanged: (v) => setState(() => message.scaleFactor = v),
-            min: 0.5,
-            max: 4.5,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const Text('Font Family'),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FontPicker(
-                        initialFontFamily: "Berlin Sans",
-                        onFontChanged: (PickerFont font) => setState(
-                            () => message.textStyle = font.toTextStyle()),
-                      ),
-                    ),
-                  );
-                },
-                child: Text(message.textStyle.fontFamily.toString()),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const Text('Text Color'),
-              TextButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (var states) =>
-                      message.textStyle.color ?? const Color(0xFF000000),
-                )),
-                child: Container(),
-                onPressed: () => showDialog<void>(
-                  context: context,
-                  builder: (_) => Material(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        OColorPicker(
-                          selectedColor: message.textStyle.color,
-                          colors: primaryColorsPalette,
-                          onColorChange: (color) {
-                            setState(() {
-                              message.textStyle = TextStyle(
-                                  fontFamily: message.textStyle.fontFamily,
-                                  color: color);
-                            });
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 16.0, bottom: 8.0),
-            child: Text('Text Positioning'),
-          ),
           SizedBox(
-            height: MediaQuery.of(context).size.width / 2,
+            height: MediaQuery.of(context).size.height -
+                MediaQuery.of(context).size.width -
+                131,
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width / 4),
-              child: Stack(
-                children: List.generate(
-                  Message.alignments.length,
-                  (i) => Align(
-                    alignment: Message.alignments[i],
-                    child: SizedBox(
-                      width: 64,
-                      height: 64,
-                      child: OutlinedButton(
-                        style: i == alignmentIndex
-                            ? OutlinedButton.styleFrom(
-                                backgroundColor: Colors.lightBlue[100],
-                                side: const BorderSide(
-                                    color: Colors.blue, width: 2),
-                              )
-                            : null,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ListView(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1.0, color: AppTheme.secondary),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(12.0),
+                      ),
+                      color: lighten(AppTheme.primary),
+                    ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      scrollPadding: const EdgeInsets.all(8),
+                      decoration: const InputDecoration.collapsed(
+                        hintText: 'Your Text Here',
+                      ),
+                      onChanged: (s) => setState(() => message.text = s),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 32.0),
+                    child: Text('Text Size'),
+                  ),
+                  Slider(
+                    value: message.scaleFactor,
+                    onChanged: (v) => setState(() => message.scaleFactor = v),
+                    min: 0.5,
+                    max: 4.5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Font Family'),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FontPicker(
+                                initialFontFamily: "Lato",
+                                onFontChanged: (PickerFont font) => setState(
+                                  () => message.textStyle = TextStyle(
+                                      color: message.textStyle.color,
+                                      fontFamily:
+                                          font.toTextStyle().fontFamily),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(message.textStyle.fontFamily.toString()),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Text Color'),
+                      OutlinedButton(
+                        style: ButtonStyle(
+                            side: MaterialStatePropertyAll<BorderSide>(
+                              BorderSide(color: AppTheme.secondary, width: 2),
+                            ),
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (var states) =>
+                                  message.textStyle.color ??
+                                  const Color(0xFF000000),
+                            )),
                         child: Container(),
-                        onPressed: () => setState(
-                          () {
-                            alignmentIndex = i;
-                            message.alignment = Message.alignments[i];
-                          },
+                        onPressed: () => showDialog<void>(
+                          context: context,
+                          builder: (_) => Material(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                OColorPicker(
+                                  selectedColor: message.textStyle.color,
+                                  colors: primaryColorsPalette,
+                                  onColorChange: (color) {
+                                    setState(() {
+                                      message.textStyle = TextStyle(
+                                          fontFamily:
+                                              message.textStyle.fontFamily,
+                                          color: color);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 8.0, top: 16.0),
+                    child: Text('Text Positioning'),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width / 2,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal:
+                              MediaQuery.of(context).size.width / 4 - 16),
+                      child: Stack(
+                        children: List.generate(
+                          Message.alignments.length,
+                          (i) => Align(
+                            alignment: Message.alignments[i],
+                            child: SizedBox(
+                              width: 64,
+                              height: 64,
+                              child: OutlinedButton(
+                                style: i == alignmentIndex
+                                    ? OutlinedButton.styleFrom(
+                                        backgroundColor:
+                                            lighten(AppTheme.primary),
+                                        side: BorderSide(
+                                            color: AppTheme.primary, width: 2),
+                                      )
+                                    : null,
+                                child: Container(),
+                                onPressed: () => setState(
+                                  () {
+                                    alignmentIndex = i;
+                                    message.alignment = i;
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  const Divider(),
+                  TextButton(
+                      child: const Text('Create The Guy'),
+                      onPressed: () {
+                        message.scaleFactor *= 1.2;
+                        message.imageURL =
+                            './images/${Message.images[imageIndex]}';
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (c) => DisplayMessagePage(
+                                      message: message,
+                                    )));
+                      }),
+                ],
               ),
             ),
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          const Divider(),
-          TextButton(
-              child: const Text('Create The Guy'),
-              onPressed: () {
-                message.scaleFactor *= 1.2;
-                message.imageURL = './images/${Message.images[imageIndex]}';
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (c) => DisplayMessagePage(
-                              message: message,
-                            )));
-              }),
         ],
       ),
     );
+  }
+
+  Color lighten(Color color, [double amount = .1]) {
+    assert(amount >= 0 && amount <= 1);
+
+    final hsl = HSLColor.fromColor(color);
+    final hslLight =
+        hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+
+    return hslLight.toColor();
   }
 }
