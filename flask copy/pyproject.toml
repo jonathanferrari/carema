@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "repl_python3_htn-api"
+name = "REST API for Care-ma"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Jonathan Ferrari jonathanferrari@berkeley.edu"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -10,9 +10,14 @@ Flask = "^2.0.1"
 pony = "^0.7.14"
 psycopg2-binary = "^2.9.1"
 requests = "^2.28.1"
+cohere = "2.6.1"
+python-dotenv= "0.20.0"
 
 [tool.poetry.dev-dependencies]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry2conda]
+name = "carema"
