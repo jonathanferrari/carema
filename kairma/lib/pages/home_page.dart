@@ -7,7 +7,7 @@ import 'package:kairma/components/wide_button.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
   static final List<String> strings =
-      "hello there my name is Jason and I like cheese and there is probably a lot more about me but I don't really know"
+      "hope gratitude positivity happiness kindness empathy wholesome tomorrow thanks cute lovely joy joyful support health health heart heart love"
           .split(' ');
 
   @override
