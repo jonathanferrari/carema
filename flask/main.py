@@ -1,12 +1,12 @@
 from flask import Flask, jsonify, request
 import json
-import os
+import os, dotenv
 import psycopg2
 import psycopg2.extras
 
 # Create a Flask server.
 app = Flask(__name__)
-
+dotenv.load_dotenv()
 # Create a cursor and initialize psycopg
 pg_conn_string = os.environ["PG_CONN_STRING"]
 
