@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,52 @@ import 'package:kairma/components/custom_text_field.dart';
 import 'package:kairma/components/wide_button.dart';
 
 import '../global/app_theme.dart';
+
+import 'package:http/http.dart' as http;
+
+import '../models/base_user.dart';
+
+Future<Album> createAlbum(BaseUser user) async {
+  final response = await http.post(
+    Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'email': user.email,
+      'name': user.firstName + ' ' + user.lastName,
+      'password': '',
+      'deleted': 0,
+      'upvotes': 0,
+      'downvotes': 0,
+      'post': 0,
+    }),
+  );
+
+  if (response.statusCode == 201) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    return Album.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to create album.');
+  }
+}
+
+class Album {
+  final int id;
+  final String title;
+
+  const Album({required this.id, required this.title});
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      id: json['id'],
+      title: json['title'],
+    );
+  }
+}
 
 /*
 id int
@@ -123,7 +170,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               WideButton(
                 text: 'Sign Up',
-                onPressed: () {
+                onPressed: () async {
                   if (password.text != confirmPassword.text) {
                     confirmPassword.clear();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -131,6 +178,12 @@ class _SignUpPageState extends State<SignUpPage> {
                         content: Text('Oop! Passwords don\'t match'),
                       ),
                     );
+                  } else {
+                    await createAlbum(BaseUser(
+                        firstName: firstName.text,
+                        lastName: lastName.text,
+                        email: email.text,
+                        password: password.text));
                   }
                 },
               ),

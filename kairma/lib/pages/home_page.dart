@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           WideButton(
-            text: 'Get Inpired',
+            text: 'Get Inspired!',
             onPressed: () => Navigator.pushNamed(context, "/display"),
           ),
         ],

@@ -5,6 +5,7 @@ import 'package:kairma/components/cool_icon_thing.dart';
 import 'package:kairma/components/message_display.dart';
 import 'package:kairma/components/sign_in_snackbar.dart';
 import 'package:kairma/components/wide_button.dart';
+import 'package:kairma/global/app_theme.dart';
 import 'package:kairma/main.dart';
 
 import '../models/message.dart';
@@ -19,6 +20,7 @@ class DisplayMessagePage extends StatefulWidget {
 class _DisplayMessagePageState extends State<DisplayMessagePage> {
   late List<MessageDisplay> messages;
   late int index;
+  late String category;
 
   @override
   void initState() {
@@ -26,6 +28,7 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
     messages =
         List.generate(10, (i) => MessageDisplay(Message.generateMessage()));
     index = 0;
+    category = 'all';
   }
 
   @override
@@ -80,39 +83,35 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
                                     !(messages[index].message.upvote ?? false);
                               }
                             }),
-                            selectedIcon: SvgPicture.asset(
-                              './images/angel.svg',
+                            selectedIcon: Image.asset(
+                              './images/angel_green.png',
                               width: 21,
                             ),
-                            unselectedIcon: SvgPicture.asset(
-                              './images/angel_outline.svg',
+                            unselectedIcon: Image.asset(
+                              './images/angel.png',
                               width: 21,
                             ),
                           ),
                           const SizedBox(
                             width: 16,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 6.0),
-                            child: CoolIconThing(
-                              selected:
-                                  !(messages[index].message.upvote ?? true),
-                              onPressed: () => setState(() {
-                                if (messages[index].message.upvote == false) {
-                                  messages[index].message.upvote = null;
-                                } else {
-                                  messages[index].message.upvote =
-                                      !(messages[index].message.upvote ?? true);
-                                }
-                              }),
-                              selectedIcon: SvgPicture.asset(
-                                './images/devil.svg',
-                                width: 32,
-                              ),
-                              unselectedIcon: SvgPicture.asset(
-                                './images/devil_outline.svg',
-                                width: 32,
-                              ),
+                          CoolIconThing(
+                            selected: !(messages[index].message.upvote ?? true),
+                            onPressed: () => setState(() {
+                              if (messages[index].message.upvote == false) {
+                                messages[index].message.upvote = null;
+                              } else {
+                                messages[index].message.upvote =
+                                    !(messages[index].message.upvote ?? true);
+                              }
+                            }),
+                            selectedIcon: Image.asset(
+                              './images/devil_red.png',
+                              width: 32,
+                            ),
+                            unselectedIcon: Image.asset(
+                              './images/devil.png',
+                              width: 32,
                             ),
                           ),
                         ],
@@ -123,13 +122,13 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
                           messages[index].message.favorite =
                               !messages[index].message.favorite;
                         }),
-                        selectedIcon: const Icon(
-                          Icons.star,
-                          size: 32,
+                        selectedIcon: Image.asset(
+                          './images/star_yellow.png',
+                          width: 28,
                         ),
-                        unselectedIcon: const Icon(
-                          Icons.star_outline,
-                          size: 32,
+                        unselectedIcon: Image.asset(
+                          './images/star.png',
+                          width: 28,
                         ),
                         selectionColor: const Color.fromARGB(255, 241, 225, 6),
                       ),
@@ -163,10 +162,67 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
-                  onPressed: () => Navigator.pushNamed(context, '/profile'),
+                  onPressed: () {
+                    if (signedIn) {
+                      Navigator.pushNamed(context, '/profile');
+                    } else {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(signInSnackbar(context));
+                    }
+                  },
                   icon: const Icon(Icons.person)),
             ),
-          )
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: DropdownButton<String>(
+                value: category,
+                style: const TextStyle(color: Colors.red, fontSize: 30),
+                onChanged: (s) => setState(() => category = s ?? category),
+                items: const [
+                  // TODO: Check Spelling
+                  DropdownMenuItem(
+                      child: Text(
+                        "All",
+                        style: TextStyle(color: AppTheme.secondary),
+                        textScaleFactor: 0.7,
+                      ),
+                      value: "all"),
+                  DropdownMenuItem(
+                      child: Text(
+                        "Encouragement",
+                        style: TextStyle(color: AppTheme.secondary),
+                        textScaleFactor: 0.7,
+                      ),
+                      value: "encouragement"),
+                  DropdownMenuItem(
+                      child: Text(
+                        "Support",
+                        style: TextStyle(color: AppTheme.secondary),
+                        textScaleFactor: 0.7,
+                      ),
+                      value: "support"),
+                  DropdownMenuItem(
+                      child: Text(
+                        "Gratitude",
+                        style: TextStyle(color: AppTheme.secondary),
+                        textScaleFactor: 0.7,
+                      ),
+                      value: "gratitude"),
+                  DropdownMenuItem(
+                      child: Text(
+                        "Inspiration",
+                        style: TextStyle(color: AppTheme.secondary),
+                        textScaleFactor: 0.7,
+                      ),
+                      value: "inspiration"),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
