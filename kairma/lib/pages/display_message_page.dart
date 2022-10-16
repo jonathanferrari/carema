@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kairma/components/sign_in_snackbar.dart';
 import 'package:kairma/components/wide_button.dart';
+import 'package:kairma/main.dart';
 
 import '../components/message_display.dart';
 import '../models/message.dart';
@@ -46,24 +48,48 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
             children: [
               IconButton(
                 icon: Icon(upvote ? Icons.bathroom : Icons.bathroom_outlined),
-                onPressed: () => setState(() {
-                  upvote = !upvote;
-                  downvote = false;
-                }),
+                onPressed: () {
+                  if (signedIn) {
+                    setState(() {
+                      upvote = !upvote;
+                      downvote = false;
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(signInSnackbar(context));
+                  }
+                },
               ),
               IconButton(
                 icon: Icon(downvote
                     ? Icons.heart_broken
                     : Icons.heart_broken_outlined),
-                onPressed: () => setState(() {
-                  downvote = !downvote;
-                  upvote = false;
-                }),
+                onPressed: () {
+                  if (signedIn) {
+                    setState(() {
+                      downvote = !downvote;
+                      upvote = false;
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(signInSnackbar(context));
+                  }
+                },
               ),
               IconButton(icon: const Icon(Icons.save_alt), onPressed: () {}),
               IconButton(
                 icon: Icon(favorite ? Icons.star : Icons.star_border),
-                onPressed: () => setState(() => favorite = !favorite),
+                onPressed: () {
+                  if (signedIn) {
+                    setState(() => favorite = !favorite);
+                  } else {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(signInSnackbar(context));
+                  }
+                },
                 color: favorite ? Colors.yellow[600] : Colors.black,
               ),
             ],
@@ -76,11 +102,17 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
           WideButton(
             text: 'Create Message',
             onPressed: () async {
-              Navigator.pushNamed(context, '/create').then(
-                (m) {
-                  if (m is Message) setState(() => message = m);
-                },
-              );
+              if (signedIn) {
+                Navigator.pushNamed(context, '/create').then(
+                  (m) {
+                    if (m is Message) setState(() => message = m);
+                  },
+                );
+              } else {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(signInSnackbar(context));
+              }
             },
           ),
         ],

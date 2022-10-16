@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
               color: AppTheme.secondary),
         ),
       ),
-      initialRoute: '/signin',
+      initialRoute: '/home',
       routes: {
         '/home': (context) => const HomePage(),
         '/display': (context) => const DisplayMessagePage(),
