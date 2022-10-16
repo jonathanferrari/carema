@@ -1,7 +1,8 @@
 import os
 import psycopg2
-
-pg_conn_string = os.environ["PG_CONN_STRING"]
+import dotenv
+dotenv.load_dotenv()
+pg_conn_string = os.getenv("CONN_STR")
 
 # Test Psycopg2
 conn = psycopg2.connect(pg_conn_string)

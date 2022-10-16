@@ -3,4 +3,4 @@ if [ ! -f "cockroach" ]; then
     mv ./cockroach-v22.1.6.linux-amd64/cockroach ./cockroach
 fi
 
-./cockroach sql --url $PG_CONN_STRING
+./cockroach sql --url $CONN_STR
