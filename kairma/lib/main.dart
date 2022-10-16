@@ -22,29 +22,31 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Care-ma',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: createMaterialColor(const Color(0xFFFFB7B3)),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            backgroundColor: AppTheme.primary,
-            foregroundColor: AppTheme.secondary,
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: createMaterialColor(const Color(0xFFFFB7B3)),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              backgroundColor: AppTheme.primary,
+              foregroundColor: AppTheme.secondary,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+            ),
           ),
-        ),
-        textTheme: TextTheme(
-          bodyText2: GoogleFonts.lato(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: AppTheme.secondary),
-        ),
-      ),
+          textTheme: TextTheme(
+            bodyText2: GoogleFonts.lato(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: AppTheme.secondary),
+          ),
+          iconTheme: const IconThemeData(color: AppTheme.secondary)),
       initialRoute: '/home',
       routes: {
         '/home': (context) => const HomePage(),
