@@ -1,8 +1,5 @@
 from flask import Flask, jsonify, request
-import json
-import os, dotenv
-import psycopg2
-import psycopg2.extras
+import json, os, dotenv, psycopg2, psycopg2.extras
 
 # Create a Flask server.
 app = Flask(__name__)
@@ -17,81 +14,83 @@ connection = psycopg2.connect(pg_conn_string)
 connection.set_session(autocommit=True)
 
 cursor = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-"""
-CREATE TABLE airbnbs (
-  id SERIAL PRIMARY KEY, 
-  title STRING, 
-  neighbourhood_group STRING, 
-  neighbourhood STRING, 
-  host_name STRING, 
-  verified BOOL, 
-  year INT
-)"
-"""
 
+# user analytics: total karma, total posts, days since joining, 
+#                 average carma, carma by day, ratio of pos v neg,
+#                 most popular, n favorited inspos
+# general: word cloud
 
-def db_get_all():
-    cursor.execute('SELECT * FROM airbnbs')
+# Helper Functions
+
+## Full Table
+def get_all(table):
+    cursor.execute(f'SELECT * FROM {table}')
     results = cursor.fetchall()
     return results
 
-
-def db_get_by_id(id):
-    cursor.execute('SELECT * FROM airbnbs WHERE id = %s', (id, ))
-    result = cursor.fetchone()
-    return result
-
-
-def db_filter_listings(min_year, group):
-    cursor.execute(
-        'SELECT * FROM airbnbs WHERE neighbourhood_group = %s AND year >= %s',
-        (group, min_year))
+## Filtered Table
+def get_by_id(table, id):
+    id_label = "user_id" if table == "favorites" else "id"
+    cursor.execute("SELECT * FROM {table} WHERE {id_label} = {id}")
     result = cursor.fetchall()
     return result
 
-
-def db_create_airbnb(title, name, neighbourhood, neighbourhood_group, verified,
-                     year):
-    cursor.execute(
-        "INSERT INTO airbnbs (title, host_name, neighbourhood, neighbourhood_group, verified, year) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id",
-        (title, name, neighbourhood, neighbourhood_group, verified, year))
-    result = cursor.fetchall()
-    return result
-
-
-def db_update_title(id, new_title):
-    cursor.execute("UPDATE airbnbs SET title = %s WHERE id = %s RETURNING id",
-                   (new_title, id))
-    result = cursor.fetchall()
-    return result
-
-
-def db_delete_listing(id):
-    cursor.execute("DELETE FROM airbnbs WHERE id = %s RETURNING id", (id, ))
-    result = cursor.fetchall()
-    return result
-
-
+def random_inspo(n = 10, category = None, carma = None):
+    """Return `n` randomly selected inspirations based on filters"""
+    filters = [category, carma]
+    if not any(filters):
+    # filter none
+        filter_str = " "
+    elif all(filters):
+    #filter both
+        filter_str = f" WHERE carma >= {carma} AND WHERE cateogry = {category} "
+    elif category:
+        filter_str = f" WHERE cateogry = {category} "
+    #filter category
+    else:
+    #filter carma
+        filter_str = f" WHERE carma >= {carma} "
+    cursor.execute("SELECT * FROM inspo{filter_str}ORDER BY RANDOM() LIMIT {n};")
+    results = cursor.fetchall()
+    # create table with filters then order by random and choose first row
+    return results
+    
 # Routes!
+
+## GET methods
 @app.route('/', methods=['GET'])
 def index():
-    return jsonify(db_get_all())
+    return str("Welcome to the Care-ma app REST API!! <3 ;)")
 
+@app.route('/quotes', methods=['GET'])
+def get_all_inspo():
+    return jsonify(get_all("inspo"))
 
-@app.route("/<id>", methods=['GET'])
-def get_by_id(id):
-    airbnb = db_get_by_id(id)
-    if not airbnb:
-        return jsonify({"error": "invalid id", "code": 404})
-    return jsonify(airbnb)
+@app.route('/favorites', methods=['GET'])
+def get_all_favs():
+    return jsonify(get_all("favories"))
 
+@app.route('/users', methods=['GET'])
+def get_all_users():
+    return jsonify(get_all("users"))
+
+@app.route("/<table>/<id>", methods=['GET'])
+def search_id(table, id):
+    result = get_by_id(table, id)
+    return jsonify(result)
 
 @app.route("/search", methods=['GET'])
 def filter_listings():
-    result = db_filter_listings(int(request.args.get('min_year')),
-                                request.args.get('group'))
+    v = request.args
+    n, carma, category = [v.get(k, None) for k in ["n", "carma", "category"]]
+    if n:
+        result = random_inspo(n=n, category=category, carma=carma)
+    else:
+        result = random_inspo(category=category, carma=carma)
     return jsonify(result)
 
+
+## POST methods
 
 @app.route("/", methods=['POST'])
 def create_airbnb():
@@ -106,6 +105,7 @@ def create_airbnb():
     except Exception as e:
         return jsonify({"error": str(e)})
 
+## PUT methods
 
 @app.route("/<id>", methods=['PUT'])
 def update_title(id):
@@ -116,6 +116,7 @@ def update_title(id):
     except Exception as e:
         return jsonify({"error": str(e)})
 
+## DELETE methods
 
 @app.route("/<id>", methods=['DELETE'])
 def delete_book(id):

@@ -13,13 +13,20 @@ connection.set_session(autocommit=True)
 
 cursor = connection.cursor()
 
-# create users, inspo tables
+#clear tables
+cursor.execute("DROP TABLE inspo; DROP TABLE users; DROP TABLE favorites;")
 
-cursor.execute("CREATE TABLE inspo (id SERIAL PRIMARY KEY, user_id INT, photo STRING, up INT, down INT, font STRING, size REAL, color INT, align INT)")
-
+# create tables
 cursor.execute(
-    "CREATE TABLE users (id SERIAL PRIMARY KEY, email STRING, pwd STRING, deleted INT, up INT, down INT, posts INT, joined DATE)"
+    "CREATE TABLE inspo (id SERIAL PRIMARY KEY, user_id INT, photo STRING, up INT, down INT, font STRING, size REAL, color INT, align INT)"
 )
 
+cursor.execute(
+    "CREATE TABLE users (id SERIAL PRIMARY KEY, email STRING, name STRING, pwd STRING, deleted INT, up INT, down INT, posts INT, joined DATE)"
+)
+
+cursor.execute(
+    "CREATE TABLE favorites (user_id INT, inspo_id INT)"
+)
 
 
