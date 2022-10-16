@@ -18,7 +18,7 @@ class CreateMessagePage extends StatefulWidget {
 
 class _CreateMessagePageState extends State<CreateMessagePage> {
   late Message message;
-  late int imageIndex;
+  late int imageIndex, alignmentIndex;
 
   @override
   void initState() {
@@ -26,6 +26,7 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
 
     imageIndex = Random().nextInt(Message.images.length);
     message = Message();
+    alignmentIndex = 4;
   }
 
   @override
@@ -57,9 +58,18 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
                           )),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.1),
-                  child: MessageDisplay(message),
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.width * 0.099,
+                  ),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.802,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.099,
+                      ),
+                      child: MessageDisplay(message),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -149,6 +159,49 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
               ),
             ],
           ),
+          const Padding(
+            padding: EdgeInsets.only(left: 16.0, bottom: 8.0),
+            child: Text('Text Positioning'),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.width / 2,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 4),
+              child: Stack(
+                children: List.generate(
+                  Message.alignments.length,
+                  (i) => Align(
+                    alignment: Message.alignments[i],
+                    child: SizedBox(
+                      width: 64,
+                      height: 64,
+                      child: OutlinedButton(
+                        style: i == alignmentIndex
+                            ? OutlinedButton.styleFrom(
+                                backgroundColor: Colors.lightBlue[100],
+                                side: const BorderSide(
+                                    color: Colors.blue, width: 2),
+                              )
+                            : null,
+                        child: Container(),
+                        onPressed: () => setState(
+                          () {
+                            alignmentIndex = i;
+                            message.alignment = Message.alignments[i];
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          const Divider(),
           TextButton(
               child: const Text('Create The Guy'),
               onPressed: () {
