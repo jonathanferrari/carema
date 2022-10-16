@@ -51,6 +51,7 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
                   font: e['font'],
                   scaleFactor: e['scaleFactor'],
                   text: e['text'],
+                  docRef: e.reference,
                 ),
               ),
             )));
@@ -149,10 +150,19 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
                             ),
                             CoolIconThing(
                               selected: messages[index].message.favorite,
-                              onPressed: () => setState(() {
-                                messages[index].message.favorite =
-                                    !messages[index].message.favorite;
-                              }),
+                              onPressed: () async {
+                                setState(() {
+                                  messages[index].message.favorite =
+                                      !messages[index].message.favorite;
+                                });
+                                await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(userID)
+                                    .update({
+                                  'favorites': FieldValue.arrayUnion(
+                                      [messages[index].message.docRef!])
+                                });
+                              },
                               selectedIcon: Image.asset(
                                 './images/star_yellow.png',
                                 width: 28,

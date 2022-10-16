@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kairma/global/app_theme.dart';
 import 'package:kairma/pages/create_message_page.dart';
 import 'package:kairma/pages/display_message_page.dart';
+import 'package:kairma/pages/get_message_text.dart';
 import 'package:kairma/pages/home_page.dart';
 import 'package:kairma/pages/profile_page.dart';
 import 'package:kairma/pages/sign_in_page.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         '/signin': (context) => const SignInPage(),
         '/signup': (context) => const SignUpPage(),
         '/profile': (context) => const ProfilePage(),
+        '/temp': ((context) => const MyWidget())
       },
     );
   }

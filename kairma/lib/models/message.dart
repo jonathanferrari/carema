@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class Message {
@@ -10,6 +11,7 @@ class Message {
   int alignment;
   bool? upvote;
   bool favorite;
+  DocumentReference? docRef;
 
   Message({
     this.imageURL,
@@ -21,6 +23,7 @@ class Message {
     this.upvote,
     this.favorite = false,
     required this.userID,
+    this.docRef,
   }) {
     textStyle = TextStyle(fontFamily: font, color: color);
   }
@@ -78,5 +81,17 @@ class Message {
         color: Color.fromARGB(
             255, rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)),
         userID: '0');
+  }
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      userID: json['userID'],
+      imageURL: json['image'],
+      alignment: json['alignment'],
+      color: Color(json['color']),
+      font: json['font'],
+      scaleFactor: json['scaleFactor'],
+      text: json['text'],
+    );
   }
 }
