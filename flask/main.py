@@ -112,7 +112,7 @@ def get_all_inspo():
 
 @app.route('/favorites', methods=['GET'])
 def get_all_favs():
-    return jsonify(Retrieve.get_all("favories"))
+    return jsonify(Retrieve.get_all("favorites"))
 
 @app.route('/users', methods=['GET'])
 def get_all_users():
