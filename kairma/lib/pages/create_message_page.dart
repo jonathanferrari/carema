@@ -27,7 +27,8 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
     super.initState();
 
     imageIndex = Random().nextInt(Message.images.length);
-    message = Message();
+    // TODO: Add user userID
+    message = Message(userID: 1);
     alignmentIndex = 4;
   }
 
@@ -55,8 +56,13 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
                   ),
                   items: List.generate(
                       Message.images.length,
-                      (i) => Image.asset(
-                            './images/${Message.images[i]}',
+                      (i) => Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.asset(
+                                './images/${Message.images[i]}',
+                              ),
+                            ),
                           )),
                 ),
                 Padding(

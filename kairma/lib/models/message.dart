@@ -7,7 +7,7 @@ class Message {
   String text;
   double scaleFactor;
   late TextStyle textStyle;
-  int alignment;
+  int alignment, userID;
   bool? upvote;
   bool favorite;
 
@@ -20,6 +20,7 @@ class Message {
     Color color = const Color(0xFF000000),
     this.upvote,
     this.favorite = false,
+    required this.userID,
   }) {
     textStyle = TextStyle(fontFamily: font, color: color);
   }
@@ -68,12 +69,14 @@ class Message {
   ];
 
   static Message generateMessage({String? text}) {
+    // TODO: Add UserID
     return Message(
         imageURL: './images/${images[rng.nextInt(images.length)]}',
         text: text ?? 'Your Text Here',
         scaleFactor: (rng.nextDouble() + 0.5) * 2,
         alignment: rng.nextInt(alignments.length),
         color: Color.fromARGB(
-            255, rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)));
+            255, rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)),
+        userID: 1);
   }
 }

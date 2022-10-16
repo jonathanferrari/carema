@@ -4,6 +4,7 @@ import 'package:kairma/global/app_theme.dart';
 import 'package:kairma/pages/create_message_page.dart';
 import 'package:kairma/pages/display_message_page.dart';
 import 'package:kairma/pages/home_page.dart';
+import 'package:kairma/pages/profile_page.dart';
 import 'package:kairma/pages/sign_in_page.dart';
 import 'package:kairma/pages/sign_up_page.dart';
 
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         '/create': (context) => const CreateMessagePage(),
         '/signin': (context) => const SignInPage(),
         '/signup': (context) => const SignUpPage(),
+        '/profile': (context) => const ProfilePage(),
       },
     );
   }

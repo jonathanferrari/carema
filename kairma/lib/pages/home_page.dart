@@ -2,9 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_scatter/flutter_scatter.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:kairma/components/wide_button.dart';
-import 'package:kairma/global/app_theme.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);

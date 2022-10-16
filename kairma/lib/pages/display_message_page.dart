@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kairma/components/cool_icon_thing.dart';
 import 'package:kairma/components/message_display.dart';
 import 'package:kairma/components/sign_in_snackbar.dart';
@@ -36,98 +37,136 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
             icon: const Icon(Icons.chevron_left),
             onPressed: () => Navigator.pop(context),
           )),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      body: Stack(
         children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    enableInfiniteScroll: false,
-                    aspectRatio: 1.0,
-                    enlargeCenterPage: true,
-                    onPageChanged: (i, r) => setState(() {
-                      if (i >= messages.length - 5) {
-                        messages.addAll(List.generate(10,
-                            (i) => MessageDisplay(Message.generateMessage())));
-                      }
-                      index = i;
-                    }),
-                    initialPage: index,
-                  ),
-                  items: messages,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              Column(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        enableInfiniteScroll: false,
+                        aspectRatio: 1.0,
+                        enlargeCenterPage: true,
+                        onPageChanged: (i, r) => setState(() {
+                          if (i >= messages.length - 5) {
+                            messages.addAll(List.generate(
+                                10,
+                                (i) =>
+                                    MessageDisplay(Message.generateMessage())));
+                          }
+                          index = i;
+                        }),
+                        initialPage: index,
+                      ),
+                      items: messages,
+                    ),
+                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      CoolIconThing(
-                          selected: messages[index].message.upvote ?? false,
-                          onPressed: () => setState(() {
-                                if (messages[index].message.upvote == true) {
+                      Row(
+                        children: [
+                          CoolIconThing(
+                            selected: messages[index].message.upvote ?? false,
+                            onPressed: () => setState(() {
+                              if (messages[index].message.upvote == true) {
+                                messages[index].message.upvote = null;
+                              } else {
+                                messages[index].message.upvote =
+                                    !(messages[index].message.upvote ?? false);
+                              }
+                            }),
+                            selectedIcon: SvgPicture.asset(
+                              './images/angel.svg',
+                              width: 21,
+                            ),
+                            unselectedIcon: SvgPicture.asset(
+                              './images/angel_outline.svg',
+                              width: 21,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6.0),
+                            child: CoolIconThing(
+                              selected:
+                                  !(messages[index].message.upvote ?? true),
+                              onPressed: () => setState(() {
+                                if (messages[index].message.upvote == false) {
                                   messages[index].message.upvote = null;
                                 } else {
                                   messages[index].message.upvote =
-                                      !(messages[index].message.upvote ??
-                                          false);
+                                      !(messages[index].message.upvote ?? true);
                                 }
                               }),
-                          selectedIcon: Icons.ice_skating,
-                          unselectedIcon: Icons.ice_skating_outlined),
-                      const SizedBox(
-                        width: 16,
+                              selectedIcon: SvgPicture.asset(
+                                './images/devil.svg',
+                                width: 32,
+                              ),
+                              unselectedIcon: SvgPicture.asset(
+                                './images/devil_outline.svg',
+                                width: 32,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       CoolIconThing(
-                        selected: !(messages[index].message.upvote ?? true),
+                        selected: messages[index].message.favorite,
                         onPressed: () => setState(() {
-                          if (messages[index].message.upvote == false) {
-                            messages[index].message.upvote = null;
-                          } else {
-                            messages[index].message.upvote =
-                                !(messages[index].message.upvote ?? true);
-                          }
+                          messages[index].message.favorite =
+                              !messages[index].message.favorite;
                         }),
-                        selectedIcon: Icons.yard,
-                        unselectedIcon: Icons.yard_outlined,
+                        selectedIcon: const Icon(
+                          Icons.star,
+                          size: 32,
+                        ),
+                        unselectedIcon: const Icon(
+                          Icons.star_outline,
+                          size: 32,
+                        ),
+                        selectionColor: const Color.fromARGB(255, 241, 225, 6),
                       ),
                     ],
                   ),
-                  CoolIconThing(
-                    selected: messages[index].message.favorite,
-                    onPressed: () => setState(() {
-                      messages[index].message.favorite =
-                          !messages[index].message.favorite;
-                    }),
-                    selectedIcon: Icons.star,
-                    unselectedIcon: Icons.star_outline,
-                    selectionColor: const Color.fromARGB(255, 241, 225, 6),
-                  ),
                 ],
+              ),
+              WideButton(
+                text: 'Create Message',
+                onPressed: () async {
+                  if (signedIn) {
+                    Navigator.pushNamed(context, '/create').then(
+                      (m) {
+                        if (m is Message) {
+                          setState(
+                              () => messages.insert(index, MessageDisplay(m)));
+                        }
+                      },
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(signInSnackbar(context));
+                  }
+                },
               ),
             ],
           ),
-          WideButton(
-            text: 'Create Message',
-            onPressed: () async {
-              if (signedIn) {
-                Navigator.pushNamed(context, '/create').then(
-                  (m) {
-                    if (m is Message) {
-                      setState(() => messages.insert(index, MessageDisplay(m)));
-                    }
-                  },
-                );
-              } else {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(signInSnackbar(context));
-              }
-            },
-          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                  onPressed: () => Navigator.pushNamed(context, '/profile'),
+                  icon: const Icon(Icons.person)),
+            ),
+          )
         ],
       ),
     );
