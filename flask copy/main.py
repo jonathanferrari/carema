@@ -209,4 +209,4 @@ def create_inspo():
 
 # Runs the API and exposes it on https://<repl name>.<replit username>.repl.co
 # ex. Mine deploys to https://htn-api.jayantsh.repl.co.
-app.run(host="0.0.0.0", debug=True)
+app.run(host="0.0.0.0", port = "8080", debug=True)
