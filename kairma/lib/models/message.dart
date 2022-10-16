@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 
 class Message {
   String? imageURL;
-  String text;
+  String text, userID;
   double scaleFactor;
   late TextStyle textStyle;
-  int alignment, userID;
+  int alignment;
   bool? upvote;
   bool favorite;
 
@@ -77,6 +77,6 @@ class Message {
         alignment: rng.nextInt(alignments.length),
         color: Color.fromARGB(
             255, rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)),
-        userID: 1);
+        userID: '0');
   }
 }

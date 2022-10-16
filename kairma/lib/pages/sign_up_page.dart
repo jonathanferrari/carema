@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kairma/components/custom_text_field.dart';
@@ -12,9 +14,10 @@ import 'package:http/http.dart' as http;
 
 import '../models/base_user.dart';
 
+/*
 Future<Album> createAlbum(BaseUser user) async {
   final response = await http.post(
-    Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+    Uri.parse('https://jsonplaceholder.typicode.com/users'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -52,7 +55,7 @@ class Album {
       title: json['title'],
     );
   }
-}
+}*/
 
 /*
 id int
@@ -179,12 +182,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     );
                   } else {
-                    await createAlbum(BaseUser(
-                        firstName: firstName.text,
-                        lastName: lastName.text,
-                        email: email.text,
-                        password: password.text));
+                    FirebaseFirestore.instance.collection('users').add({
+                      'email': email.text,
+                      'name': firstName.text + ' ' + lastName.text,
+                      'password': password.text,
+                    });
                   }
+                  Navigator.pop(context);
                 },
               ),
               RichText(

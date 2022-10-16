@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kairma/components/custom_text_field.dart';
@@ -15,12 +17,13 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final TextEditingController email = TextEditingController(),
       password = TextEditingController();
-  late bool showPassword;
+  late bool showPassword, loading;
 
   @override
   void initState() {
     super.initState();
     showPassword = false;
+    loading = false;
   }
 
   @override
@@ -86,9 +89,34 @@ class _SignInPageState extends State<SignInPage> {
               ),
               WideButton(
                 text: 'Sign In',
-                onPressed: () {
-                  signedIn = true;
-                  Navigator.pop(context);
+                onPressed: () async {
+                  if (loading) return;
+                  setState(() {
+                    loading = true;
+                  });
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .where('email', isEqualTo: email.text)
+                      .where('password', isEqualTo: password.text)
+                      .get()
+                      .then((v) {
+                    if (v.size > 0) {
+                      userID = v.docs[0].id;
+                      signedIn = true;
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Email/Password incorrect'),
+                      ));
+                      setState(() {
+                        password.clear();
+                      });
+                    }
+                  });
+                  setState(() {
+                    loading = false;
+                  });
                 },
               ),
               RichText(

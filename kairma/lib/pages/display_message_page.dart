@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kairma/components/cool_icon_thing.dart';
@@ -21,14 +25,38 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
   late List<MessageDisplay> messages;
   late int index;
   late String category;
+  late bool loading;
 
   @override
   void initState() {
     super.initState();
-    messages =
-        List.generate(10, (i) => MessageDisplay(Message.generateMessage()));
+    messages = [];
+    initMessages();
+    loading = true;
     index = 0;
     category = 'all';
+  }
+
+  void initMessages() async {
+    await FirebaseFirestore.instance
+        .collection('inspirations')
+        .get()
+        .then((v) => v.docs.forEach((e) => messages.add(
+              MessageDisplay(
+                Message(
+                  userID: e['userID'],
+                  imageURL: e['image'],
+                  alignment: e['alignment'],
+                  color: Color(e['color']),
+                  font: e['font'],
+                  scaleFactor: e['scaleFactor'],
+                  text: e['text'],
+                ),
+              ),
+            )));
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -45,97 +73,101 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: CarouselSlider(
-                      options: CarouselOptions(
-                        enableInfiniteScroll: false,
-                        aspectRatio: 1.0,
-                        enlargeCenterPage: true,
-                        onPageChanged: (i, r) => setState(() {
-                          if (i >= messages.length - 5) {
-                            messages.addAll(List.generate(
-                                10,
-                                (i) =>
-                                    MessageDisplay(Message.generateMessage())));
-                          }
-                          index = i;
-                        }),
-                        initialPage: index,
-                      ),
-                      items: messages,
+              loading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                              enableInfiniteScroll: true,
+                              aspectRatio: 1.0,
+                              enlargeCenterPage: true,
+                              initialPage: Random().nextInt(messages.length),
+                              onPageChanged: (i, r) =>
+                                  setState(() => index = i),
+                            ),
+                            items: messages,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              children: [
+                                CoolIconThing(
+                                  selected:
+                                      !(messages[index].message.upvote ?? true),
+                                  onPressed: () => setState(() {
+                                    if (messages[index].message.upvote ==
+                                        false) {
+                                      messages[index].message.upvote = null;
+                                    } else {
+                                      messages[index].message.upvote =
+                                          !(messages[index].message.upvote ??
+                                              true);
+                                    }
+                                  }),
+                                  selectedIcon: Image.asset(
+                                    './images/devil_red.png',
+                                    width: 32,
+                                  ),
+                                  unselectedIcon: Image.asset(
+                                    './images/devil.png',
+                                    width: 32,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 16,
+                                ),
+                                CoolIconThing(
+                                  selected:
+                                      messages[index].message.upvote ?? false,
+                                  onPressed: () => setState(() {
+                                    if (messages[index].message.upvote ==
+                                        true) {
+                                      messages[index].message.upvote = null;
+                                    } else {
+                                      messages[index].message.upvote =
+                                          !(messages[index].message.upvote ??
+                                              false);
+                                    }
+                                  }),
+                                  selectedIcon: Image.asset(
+                                    './images/angel_green.png',
+                                    width: 21,
+                                  ),
+                                  unselectedIcon: Image.asset(
+                                    './images/angel.png',
+                                    width: 21,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            CoolIconThing(
+                              selected: messages[index].message.favorite,
+                              onPressed: () => setState(() {
+                                messages[index].message.favorite =
+                                    !messages[index].message.favorite;
+                              }),
+                              selectedIcon: Image.asset(
+                                './images/star_yellow.png',
+                                width: 28,
+                              ),
+                              unselectedIcon: Image.asset(
+                                './images/star.png',
+                                width: 28,
+                              ),
+                              selectionColor:
+                                  const Color.fromARGB(255, 241, 225, 6),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Row(
-                        children: [
-                          CoolIconThing(
-                            selected: messages[index].message.upvote ?? false,
-                            onPressed: () => setState(() {
-                              if (messages[index].message.upvote == true) {
-                                messages[index].message.upvote = null;
-                              } else {
-                                messages[index].message.upvote =
-                                    !(messages[index].message.upvote ?? false);
-                              }
-                            }),
-                            selectedIcon: Image.asset(
-                              './images/angel_green.png',
-                              width: 21,
-                            ),
-                            unselectedIcon: Image.asset(
-                              './images/angel.png',
-                              width: 21,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          CoolIconThing(
-                            selected: !(messages[index].message.upvote ?? true),
-                            onPressed: () => setState(() {
-                              if (messages[index].message.upvote == false) {
-                                messages[index].message.upvote = null;
-                              } else {
-                                messages[index].message.upvote =
-                                    !(messages[index].message.upvote ?? true);
-                              }
-                            }),
-                            selectedIcon: Image.asset(
-                              './images/devil_red.png',
-                              width: 32,
-                            ),
-                            unselectedIcon: Image.asset(
-                              './images/devil.png',
-                              width: 32,
-                            ),
-                          ),
-                        ],
-                      ),
-                      CoolIconThing(
-                        selected: messages[index].message.favorite,
-                        onPressed: () => setState(() {
-                          messages[index].message.favorite =
-                              !messages[index].message.favorite;
-                        }),
-                        selectedIcon: Image.asset(
-                          './images/star_yellow.png',
-                          width: 28,
-                        ),
-                        unselectedIcon: Image.asset(
-                          './images/star.png',
-                          width: 28,
-                        ),
-                        selectionColor: const Color.fromARGB(255, 241, 225, 6),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
               WideButton(
                 text: 'Create Message',
                 onPressed: () async {

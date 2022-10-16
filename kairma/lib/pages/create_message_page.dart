@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_font_picker/flutter_font_picker.dart';
 import 'package:kairma/global/app_theme.dart';
+import 'package:kairma/main.dart';
 import 'package:kairma/pages/display_message_page.dart';
 import 'package:o_color_picker/o_color_picker.dart';
 
@@ -28,7 +31,7 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
 
     imageIndex = Random().nextInt(Message.images.length);
     // TODO: Add user userID
-    message = Message(userID: 1);
+    message = Message(userID: userID!);
     alignmentIndex = 4;
   }
 
@@ -223,10 +226,26 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
                   const Divider(),
                   WideButton(
                     text: 'Inspire Others',
-                    onPressed: () {
+                    onPressed: () async {
                       message.scaleFactor *= 1.2;
                       message.imageURL =
                           './images/${Message.images[imageIndex]}';
+
+                      int myInt = int.parse(
+                          message.textStyle.color.toString().substring(8, 16),
+                          radix: 16);
+                      await FirebaseFirestore.instance
+                          .collection('inspirations')
+                          .add({
+                        'text': message.text,
+                        'userID': message.userID,
+                        'scaleFactor': message.scaleFactor,
+                        'font': message.textStyle.fontFamily,
+                        'alignment': message.alignment,
+                        'color': myInt,
+                        'image': message.imageURL,
+                        'random': Random().nextDouble(),
+                      });
                       Navigator.pop(context, message);
                     },
                   ),
