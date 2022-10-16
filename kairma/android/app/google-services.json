@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "72718739938",
+    "project_id": "carema-5e1a9",
+    "storage_bucket": "carema-5e1a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72718739938:android:7eea1a300b802c4b8b71bb",
+        "android_client_info": {
+          "package_name": "com.onatcipli.networkUpp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72718739938-u6nppd8gi7d7kjf5hkgrcocdvf34snm4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFmHc_1PLAniXSlMAaSuoBxt9O-lc8jNo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72718739938-u6nppd8gi7d7kjf5hkgrcocdvf34snm4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "72718739938-o6sai2nq4cc9crgmnjptf7s3dl5c7r5n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.onatcipli.networkUpp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
