@@ -222,19 +222,24 @@ class _CreateMessagePageState extends State<CreateMessagePage> {
                     height: 8,
                   ),
                   const Divider(),
-                  TextButton(
-                      child: const Text('Create The Guy'),
-                      onPressed: () {
-                        message.scaleFactor *= 1.2;
-                        message.imageURL =
-                            './images/${Message.images[imageIndex]}';
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (c) => DisplayMessagePage(
-                                      message: message,
-                                    )));
-                      }),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextButton(
+                        child: const Text(
+                          'Inspire Others',
+                          textScaleFactor: 1.6,
+                        ),
+                        onPressed: () {
+                          message.scaleFactor *= 1.2;
+                          message.imageURL =
+                              './images/${Message.images[imageIndex]}';
+                          Navigator.pop(context, message);
+                        },
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

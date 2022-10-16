@@ -61,7 +61,6 @@ class Message {
     'bk14.png',
     'bk15.png',
     'bk16.png',
-    'bk17.png',
   ];
 
   static Message generateMessage({String? text}) {
