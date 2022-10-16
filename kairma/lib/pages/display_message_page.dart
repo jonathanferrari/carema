@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_downloader/image_downloader.dart';
-import 'package:mdi/mdi.dart';
 
 import '../models/message.dart';
 
@@ -18,7 +16,7 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
   @override
   void initState() {
     super.initState();
-    message = Message(text: 'Hello World!', imageURL: './images/image.png');
+    message = Message.generateMessage();
     upvote = false;
     downvote = false;
     favorite = false;
@@ -27,25 +25,44 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: const Icon(Icons.chevron_left),
+            onPressed: () => Navigator.pop(context),
+          )),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Stack(
-            children: [
-              Image.asset(
-                message.imageURL,
-              ),
-              Center(
-                  child: Text(
-                message.text,
-                style: message.textStyle,
-              ))
-            ],
+          SizedBox(
+            height: MediaQuery.of(context).size.width,
+            child: Stack(
+              children: [
+                Image.asset(
+                  message.imageURL,
+                  fit: BoxFit.fill,
+                  scale: 0.1,
+                ),
+                SizedBox(
+                  width: double.maxFinite,
+                  height: double.maxFinite,
+                  child: Align(
+                    alignment: message.alignment,
+                    child: Text(
+                      message.text,
+                      style: message.textStyle,
+                      textScaleFactor: message.scaleFactor,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                icon: Icon(upvote ? Mdi.heart : Mdi.heartOutline),
+                icon: Icon(upvote ? Icons.bathroom : Icons.bathroom_outlined),
                 onPressed: () => setState(() {
                   upvote = !upvote;
                   downvote = false;
@@ -60,20 +77,20 @@ class _DisplayMessagePageState extends State<DisplayMessagePage> {
                   upvote = false;
                 }),
               ),
+              IconButton(icon: const Icon(Icons.save_alt), onPressed: () {}),
               IconButton(
-                  icon: const Icon(Icons.save_alt),
-                  onPressed: () => ImageDownloader.downloadImage(
-                      'https://i.insider.com/602ee9ced3ad27001837f2ac?width=750&format=jpeg&auto=webp')),
-              IconButton(
-                  icon: Icon(favorite ? Icons.star : Icons.star_border),
-                  onPressed: () => setState(() => favorite = !favorite)),
+                icon: Icon(favorite ? Icons.star : Icons.star_border),
+                onPressed: () => setState(() => favorite = !favorite),
+                color: favorite ? Colors.yellow[600] : Colors.black,
+              ),
             ],
           ),
-          IconButton(icon: const Icon(Icons.heart_broken), onPressed: () {}),
-          TextButton(
-            child: const Text('Create Message'),
-            onPressed: () {},
+          IconButton(
+            icon: const Icon(Icons.autorenew),
+            onPressed: () =>
+                setState(() => message = Message.generateMessage()),
           ),
+          TextButton(child: const Text('Create Message'), onPressed: () {}),
         ],
       ),
     );
