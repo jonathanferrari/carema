@@ -188,23 +188,23 @@ def create_inspo():
     
 ## PUT methods
 
-@app.route("/<id>", methods=['PUT'])
-def update_title(id):
-    try:
-        title = request.json['title']
+# @app.route("/<id>", methods=['PUT'])
+# def update_title(id):
+#     try:
+#         title = request.json['title']
       
-        return jsonify(db_update_title(id, title))
-    except Exception as e:
-        return jsonify({"error": str(e)})
+#         return jsonify(db_update_title(id, title))
+#     except Exception as e:
+#         return jsonify({"error": str(e)})
 
-## DELETE methods
+# ## DELETE methods
 
-@app.route("/<id>", methods=['DELETE'])
-def delete_book(id):
-    try:
-        return jsonify(db_delete_listing(id))
-    except Exception as e:
-        return jsonify({"error": str(e)})
+# @app.route("/<id>", methods=['DELETE'])
+# def delete_book(id):
+#     try:
+#         return jsonify(db_delete_listing(id))
+#     except Exception as e:
+#         return jsonify({"error": str(e)})
 
 
 # Runs the API and exposes it on https://<repl name>.<replit username>.repl.co
