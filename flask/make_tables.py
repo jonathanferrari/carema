@@ -18,7 +18,7 @@ cursor.execute("DROP TABLE inspo; DROP TABLE users; DROP TABLE favorites;")
 
 # create tables
 cursor.execute(
-    "CREATE TABLE inspo (id SERIAL PRIMARY KEY, user_id INT, photo STRING, up INT, down INT, font STRING, size REAL, color INT, align INT)"
+    "CREATE TABLE inspo (id SERIAL PRIMARY KEY, user_id INT, quote STRING, photo STRING, up INT, down INT, font STRING, size REAL, color INT, align INT)"
 )
 
 cursor.execute(

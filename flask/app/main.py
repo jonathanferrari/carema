@@ -15,8 +15,6 @@ connection.set_session(autocommit=True)
 
 cursor = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
-
-
 # Helper Functions
 class Retrieve:
     ## Full Table
@@ -28,7 +26,7 @@ class Retrieve:
     ## Filtered Table
     def get_by_id(table, id):
         id_label = "user_id" if table == "favorites" else "id"
-        cursor.execute("SELECT * FROM {table} WHERE {id_label} = {id}")
+        cursor.execute(f"SELECT * FROM {table} WHERE {id_label} = {id}")
         result = cursor.fetchall()
         return result
 
@@ -47,7 +45,7 @@ class Retrieve:
         else:
         #filter carma
             filter_str = f" WHERE carma >= {carma} "
-        cursor.execute("SELECT * FROM inspo{filter_str}ORDER BY RANDOM() LIMIT {n};")
+        cursor.execute(f"SELECT * FROM inspo{filter_str}ORDER BY RANDOM() LIMIT {n};")
         results = cursor.fetchall()
         # create table with filters then order by random and choose first row
         return results
@@ -59,9 +57,9 @@ class Make:
         cursor.execute(f"INSERT INTO users {columns} {values} RETURNING *")
         result = cursor.fetchone()
         return result
-    def inspo(user_id, photo, up, down, font, size, color, align):
-        columns = "(user_id, photo, up, down, font, size, color, align)"
-        values = f"Values{(user_id, photo, up, down, font, size, color, align)}"
+    def inspo(user_id, quote, photo, up, down, font, size, color, align):
+        columns = "(user_id, quote, photo, up, down, font, size, color, align)"
+        values = f"Values{(user_id, quote, photo, up, down, font, size, color, align)}"
         cursor.execute(f"INSERT INTO inspos {columns} {values} RETURNING *")
         result = cursor.fetchone()
         return result
@@ -104,13 +102,8 @@ class UserStats:
         cursor.execute(sql_str)
         result = cursor.fetchone()
         return result
-    
-        
-class UniversalStats:
-    
-    def word_cloud():
-       pass 
-        
+
+
 # Routes!
 
 ## GET methods
@@ -198,25 +191,7 @@ def create_inspo():
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": str(e)})
-    
-# PUT methods
 
-# @app.route("/<id>", methods=['PUT'])
-# def update_title(id):
-#     try:
-#         title = request.json['title']
-      
-#         return jsonify(db_update_title(id, title))
-#     except Exception as e:
-#         return jsonify({"error": str(e)})
 
-# ## DELETE methods
 
-# @app.route("/<id>", methods=['DELETE'])
-# def delete_book(id):
-#     try:
-#         return jsonify(db_delete_listing(id))
-#     except Exception as e:
-#         return jsonify({"error": str(e)})
-
-app.run('0.0.0.0', port='4000',debug=True)
+app.run('0.0.0.0', debug=True)
